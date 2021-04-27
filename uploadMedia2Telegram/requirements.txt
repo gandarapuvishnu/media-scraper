@@ -1,0 +1,10 @@
+cffi==1.14.5
+click==7.1.2
+cryptg==0.2.post4
+hachoir==3.1.2
+pyaes==1.6.1
+pyasn1==0.4.8
+pycparser==2.20
+rsa==4.7.2
+telegram-upload==0.4.0
+Telethon==1.21.1
