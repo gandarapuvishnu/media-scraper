@@ -1,11 +1,11 @@
 import os
 import time
 import urllib.request
-from Common import Extractor, Downloader
+from downloadImages.Common import Extractor, Downloader
 
 
-def main():
-    keywords = input("\nEnter key words to search for: ")
+def main(keywords):
+
     extractor = Extractor('reddit')
     refs = extractor.get_web_page_links(keywords)
 
@@ -42,4 +42,5 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    keys = input("\nEnter key words to search for: ")
+    main(keys)

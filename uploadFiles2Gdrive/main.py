@@ -11,14 +11,25 @@ from googleapiclient.http import MediaFileUpload
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly',
           'https://www.googleapis.com/auth/drive.file']
 
+from colorama import init, Fore, Style
+
+# essential for Windows environment
+init()
+
+
+def cprint(s, color=Fore.Blue, brightness=Style.NORMAL, **kwargs):
+    """Utility function wrapping the regular `print()` function
+    but with colors and brightness"""
+    print(f"{brightness}{color}{s}{Style.RESET_ALL}", **kwargs)
+
 
 def get_gdrive_service():
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('./token.pickle'):
-        with open('./token.pickle', 'rb') as token:
+    if os.path.exists('.Creds/token.pickle'):
+        with open('.Creds/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -26,36 +37,35 @@ def get_gdrive_service():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                './credentials.json', SCOPES)
+                '.Creds/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('./token.pickle', 'wb') as token:
+        with open('.Creds/token.pickle', 'wb') as token:
             pickle.dump(creds, token)
     # return Google Drive API service
     return build('drive', 'v3', credentials=creds)
 
 
-def do_stuff(ext, folder_id, service):
-    files = glob.glob1(path, "*" + ext)
-    total = len(files)
-    print("Total " + ext[1:] + " files: ", total)
+def upload_files(path, folder):
+    def do_stuff(ext):
+        files = glob.glob1(path, "*" + ext)
+        total = len(files)
+        cprint("Total " + ext[1:] + " files: ", total)
 
-    for i in range(total):
-        # first, define file metadata, such as the name and the parent folder ID
-        g = files[i]
+        for i in range(total):
+            # first, define file metadata, such as the name and the parent folder ID
+            g = files[i]
 
-        file_metadata = {
-            "name": g,
-            "parents": [folder_id]
-        }
-        print("\nUploading ", g, " to gdrive.")
-        media = MediaFileUpload(path + g, resumable=True)
-        file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
-        print("File created, id:", file.get("id"))
-        print("Uploaded ", i + 1, "/", total)
+            file_metadata = {
+                "name": g,
+                "parents": [folder_id]
+            }
+            cprint("\nUploading ", g, " to gdrive.")
+            media = MediaFileUpload(os.path.join(path, g), resumable=True)
+            _file = service.files().create(body=file_metadata, media_body=media, fields='id').execute()
+            cprint("File created, id:", _file.get("id"))
+            cprint("Uploaded ", i + 1, "/", total)
 
-
-def upload_files():
     # authenticate account
     service = get_gdrive_service()
     # folder details we want to make
@@ -67,22 +77,25 @@ def upload_files():
     file = service.files().create(body=folder_metadata, fields="id").execute()
     # get the folder id
     folder_id = file.get("id")
-    print("Folder ID:", folder_id)
+    cprint("Folder ID:", folder_id)
 
     # upload
     FilesExts = ['.jpg', '.jpeg', '.png', '.mp4', '.mkv']
-    for i in FilesExts:
-        do_stuff(i, folder_id, service)
+    for _ext in FilesExts:
+        do_stuff(_ext)
 
 
-if __name__ == '__main__':
-
+def main():
     # Input dir
     path = input('Enter path to folder: ')
 
     if os.path.isdir(path):
         # Output dir
         folder = input("\nWhat do you want to call the folder: ")
-        upload_files()
+        upload_files(path, folder)
     else:
         sys.exit(1)
+
+
+if __name__ == '__main__':
+    main()

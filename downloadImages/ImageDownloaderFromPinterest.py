@@ -1,6 +1,6 @@
 from selenium import webdriver
 import time
-from Common import Extractor, scroll, Downloader
+from downloadImages.Common import Extractor, scroll, Downloader
 import os
 
 
@@ -38,9 +38,7 @@ def get_pins(link):
         downloader.write(src, dest)
 
 
-if __name__ == '__main__':
-
-    keywords = input("\nEnter key words to search for: ")
+def main(keywords):
     extractor = Extractor('pinterest')
     refs = extractor.get_web_page_links(keywords)
     print("Found " + str(len(refs)) + ' web pages\n')
@@ -53,3 +51,8 @@ if __name__ == '__main__':
     for url in refs:
         get_pins(url)
         time.sleep(3)
+
+
+if __name__ == '__main__':
+    keys = input("\nEnter key words to search for: ")
+    main(keys)

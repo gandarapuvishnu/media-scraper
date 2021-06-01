@@ -1,0 +1,7 @@
+/.idea/
+/venv/
+/config/
+/__pycache__/
+/Creds/
+/Velociraptors/
+test.py

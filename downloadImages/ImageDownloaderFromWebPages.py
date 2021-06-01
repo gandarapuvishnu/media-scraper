@@ -1,10 +1,18 @@
 import os
 import time
 import threading
-from Common import Extractor, Downloader
+from downloadImages.Common import Extractor, Downloader
 
 
-def main():
+def main(keywords):
+    folder = './' + keywords
+    try:
+        os.mkdir(folder)
+    except FileExistsError:
+        pass
+
+    extractor = Extractor()
+    downloader = Downloader(folder)
 
     refs = extractor.get_web_page_links(keywords)
     print("Found ", len(refs), " websites")
@@ -31,15 +39,5 @@ def main():
 
 
 if __name__ == '__main__':
-    keywords = input("\nEnter key words to search for: ")
-
-    folder = './' + keywords
-    try:
-        os.mkdir(folder)
-    except FileExistsError:
-        pass
-
-    extractor = Extractor()
-    downloader = Downloader(folder)
-
-    main()
+    keys = input("\nEnter key words to search for: ")
+    main(keys)

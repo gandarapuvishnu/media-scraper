@@ -1,3 +1,3 @@
 # web-scraper
 
-Control everything with Python 🙂.
+Download and upload images to Cloud sequentially, using Python 🙂.

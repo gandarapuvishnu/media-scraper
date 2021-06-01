@@ -11,20 +11,10 @@ import string
 import random
 
 
-def log(msg):
-    _file = open('log.txt', 'a')
-    _file.write(msg+'\n')
-    print(msg)
-    _file.close()
-
-
 if os.path.isdir('./config'):
     shutil.rmtree('./config')
-    log("Config cleared.")
+    print("Config cleared.")
 
-if os.path.isfile('./log.txt'):
-    os.remove('./log.txt')
-    log("Log cleared.")
 
 bot = Bot()
 
@@ -105,8 +95,8 @@ def upload(img, caption):
     try:
         bot.upload_photo(prepare_and_fix_photo(img), caption)
     except Exception as e:
-        log(str(e))
-        log("Failed to upload {}\n".format(img))
+        print(str(e))
+        print("Failed to upload {}\n".format(img))
         pass
 
 

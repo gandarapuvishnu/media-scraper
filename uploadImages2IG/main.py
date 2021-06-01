@@ -3,15 +3,21 @@ import glob
 import time
 import threading
 
-from preUmain import log, tojpg, login, upload
+from uploadImages2IG.preUmain import tojpg, login, upload
+
+from colorama import init, Fore, Style
+
+# essential for Windows environment
+init()
 
 
-if __name__ == '__main__':
-    log("Hello World")
+def cprint(s, color=Fore.YELLOW, brightness=Style.BRIGHT, **kwargs):
+    """Utility function wrapping the regular `print()` function
+    but with colors and brightness"""
+    print(f"{brightness}{color}{s}{Style.RESET_ALL}", **kwargs)
 
-    # 1. Get Folder path
-    path = input("Enter folder path: ")
 
+def main(path):
     # 2. Get credentials
     user = input("Enter instagram username: ")
     pas = input("Enter instagram password: ")
@@ -19,15 +25,15 @@ if __name__ == '__main__':
     # 3. Login
     try:
         login(user, pas)
-        log("Login successful.")
+        cprint("Login successful.")
     except KeyError:
-        log("Incorrect credentials")
+        cprint("Incorrect credentials")
         exit()
 
     start_time = time.time()
     # 4. Convert all images to jpg-format
     tojpg(path)
-    log("All images converted to jpg format.")
+    cprint("All images converted to jpg format.")
 
     img_files = glob.glob(path + '\*.jpg')
 
@@ -36,7 +42,7 @@ if __name__ == '__main__':
 
     # 5. resize to instagram size-format
     # 6. Upload
-    log("Uploading {} jpg files".format(len(img_files)))
+    cprint("Uploading {} jpg files".format(len(img_files)))
     for i, link in enumerate(img_files):
         t = threading.Thread(target=upload, args=(str(link), 'Uploaded by Python'))
         t.start()
@@ -44,8 +50,13 @@ if __name__ == '__main__':
 
     for thread in threads:
         thread.join()
-        log("Uploaded {} / {}\n".format(count, len(threads)))
+        cprint("Uploaded {} / {}\n".format(count, len(threads)))
         count += 1
 
     last_time = time.time()
-    log("Time elapsed: {} seconds".format(round(last_time-start_time, 1)))
+    cprint("Time elapsed: {} seconds".format(round(last_time - start_time, 1)))
+
+
+if __name__ == '__main__':
+    # 1. Get Folder path
+    main(input("Enter folder path: "))

@@ -2,17 +2,19 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 import os
-from Common import Downloader
+from downloadImages.Common import Downloader
 
 
-def main():
+def main(keywords):
     driver = webdriver.Chrome()
-
+    name_of_folder = './' + keywords
     try:
         os.mkdir(name_of_folder)
     except FileExistsError:
         pass
     time.sleep(2)
+
+    downloader = Downloader(name_of_folder)
 
     # Search and locate them
     driver.get('https://www.google.com/')
@@ -50,14 +52,5 @@ def main():
 
 
 if __name__ == '__main__':
-    keywords = input("Input: ")
-
-    name_of_folder = './' + keywords
-    try:
-        os.mkdir(name_of_folder)
-    except FileExistsError:
-        pass
-
-    downloader = Downloader(name_of_folder)
-
-    main()
+    keys = input("Input: ")
+    main(keys)
