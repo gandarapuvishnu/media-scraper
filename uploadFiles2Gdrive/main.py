@@ -17,7 +17,7 @@ from colorama import init, Fore, Style
 init()
 
 
-def cprint(s, color=Fore.Blue, brightness=Style.NORMAL, **kwargs):
+def cprint(s, color=Fore.BLUE, brightness=Style.NORMAL, **kwargs):
     """Utility function wrapping the regular `print()` function
     but with colors and brightness"""
     print(f"{brightness}{color}{s}{Style.RESET_ALL}", **kwargs)
