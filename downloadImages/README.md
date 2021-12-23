@@ -1,13 +1,8 @@
 # imageDownloader
 
-Download images from 
+Downloads images from 
    
     - Google Images
     - Websites
+    - Reddit
     - Pinterest
-
-
-Useful extensions
-
-[Downloader for Instagram](https://microsoftedge.microsoft.com/addons/detail/downloader-for-instagram/hlbojfooplgfkfjlcikdccdbmhfaijfe)
-
