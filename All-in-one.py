@@ -29,21 +29,21 @@ def upload_images(keywords):
     path = './' + keywords
 
     if os.path.isdir(path):
-        # Uploads images from the folder, into google drive with same folder name -
+        # It uploads images from the folder, into google drive with same folder name -
         # Google cloud account OAuth handle required
         gdrive(path, keywords)
 
         # Uploads all images to telegram (Saved Messages) - API id required
         tel(path)
 
-        # uploads images to Instagram - Login creds required
+        # Also,uploads images to Instagram - Login creds required
         ig(path)
     else:
         sys.exit(1)
 
 
 if __name__ == '__main__':
-    print("Hello World")
+    print("Welcome to media scraper combo.")
 
     keys = input("\nEnter key words to search for: ")
 
